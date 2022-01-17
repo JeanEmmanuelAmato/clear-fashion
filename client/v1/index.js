@@ -71,7 +71,7 @@ function comparePrice(a,b){
   return a.price - b.price;
 }
 
-let sortByPrice = marketplace;
+let sortByPrice = marketplace.slice();
 
 sortByPrice.sort(comparePrice);
 
@@ -89,7 +89,7 @@ function compareDate(a,b){
   return a - b;
 }
 
-let sortByDate = marketplace;
+let sortByDate = marketplace.slice();
 
 sortByDate.sort(compareDate);
 
@@ -99,6 +99,19 @@ console.log(sortByDate);
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
 // 2. Log the list
+
+let filterMarketplace = [];
+function FilterPrice(a)
+{
+  if (a.price > 50 && a.price < 100){
+    filterMarketplace.push(a);
+  }
+}
+
+marketplace.forEach(FilterPrice);
+
+console.log(filterMarketplace);
+
 
 
 // 🎯 TODO: Average Basket
