@@ -32,8 +32,8 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // I can find on these e-shops
 // 2. Log the variable
 
-
-
+let cheapestTshirt = "https://www.loom.fr/collections/tous-les-vetements/products/le-t-shirt";
+console.log(cheapestTshirt);
 
 
 /**
