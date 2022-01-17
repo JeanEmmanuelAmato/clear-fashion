@@ -48,13 +48,19 @@ console.log(cheapestTshirt);
 // 🎯 TODO: Number of products
 // 1. Create a variable and assign it the number of products
 // 2. Log the variable
+
 let numberOfProducts = marketplace.length;
+console.log(numberOfProducts);
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
 // 2. Log the variable
 // 3. Log how many brands we have
 
+let brandsName = [];
+MY_FAVORITE_BRANDS.forEach(brand => brandsName.push(brand.name));
+console.log(brandsName);
+console.log(brandsName.length);
 
 // 🎯 TODO: Sort by price
 // 1. Create a function to sort the marketplace products by price
