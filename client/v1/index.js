@@ -57,8 +57,14 @@ console.log(numberOfProducts);
 // 2. Log the variable
 // 3. Log how many brands we have
 
+// let brandsName = [];
+// MY_FAVORITE_BRANDS.forEach(brand => brandsName.push(brand.name));
+// console.log(brandsName);
+// console.log(brandsName.length);
+
 let brandsName = [];
-MY_FAVORITE_BRANDS.forEach(brand => brandsName.push(brand.name));
+marketplace.forEach(item => brandsName.push(item.brand));
+brandsName = new Set(brandsName);
 console.log(brandsName);
 console.log(brandsName.length);
 
@@ -101,6 +107,7 @@ console.log(sortByDate);
 // 2. Log the list
 
 let filterMarketplace = [];
+
 function FilterPrice(a)
 {
   if (a.price > 50 && a.price < 100){
@@ -118,7 +125,11 @@ console.log(filterMarketplace);
 // 1. Determine the average basket of the marketplace
 // 2. Log the average
 
+let sumPrice = 0;
+marketplace.forEach(item => sumPrice+= item.price);
+let averagePrice = sumPrice/marketplace.length;
 
+console.log(averagePrice);
 
 
 
