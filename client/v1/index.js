@@ -68,7 +68,7 @@ console.log(brandsName.length);
 // 3. Log the variable
 
 function comparePrice(a,b){
-  return a["price"] - b["price"];
+  return a.price - b.price;
 }
 
 let sortByPrice = marketplace;
@@ -82,6 +82,18 @@ console.log(sortByPrice);
 // 1. Create a function to sort the marketplace objects by products date
 // 2. Create a variable and assign it the list of products by date from recent to old
 // 3. Log the variable
+
+function compareDate(a,b){
+  a = new Date(a.date);
+  b = new Date(b.date);
+  return a - b;
+}
+
+let sortByDate = marketplace;
+
+sortByDate.sort(compareDate);
+
+console.log(sortByDate);
 
 
 // 🎯 TODO: Filter a specific price range
