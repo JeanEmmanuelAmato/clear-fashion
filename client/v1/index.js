@@ -282,11 +282,16 @@ const COTELE_PARIS = [
 // 2. Log the product
 
 let product = COTELE_PARIS.find(item => item.uuid =='b56c6d88-749a-5b4c-b571-e5b5c6483131');
-console.log(product)
+console.log(product);
 
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the new list of product
+
+const index = COTELE_PARIS.indexOf(product);
+COTELE_PARIS.splice(index, 1);
+
+console.log(COTELE_PARIS);
 
 // 🎯 TODO: Save the favorite product
 let blueJacket = {
