@@ -156,6 +156,15 @@ console.log(averagePrice);
 // 2. Log the variable
 // 3. Log the number of products by brands
 
+let brands = {};
+for (let item of brandsName){
+  brands[item] = marketplace.filter(product => product.brand == item);
+}
+
+console.log(brands);
+for (let brandname in brands){
+  console.log(brands[brandname].length);
+}
 
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
