@@ -281,6 +281,8 @@ const COTELE_PARIS = [
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the product
 
+let product = COTELE_PARIS.find(item => item.uuid =='b56c6d88-749a-5b4c-b571-e5b5c6483131');
+console.log(product)
 
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
