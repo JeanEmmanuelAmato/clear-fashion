@@ -170,14 +170,19 @@ for (let brandname in brands){
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
 
+for (let brandname in brands){
+  brands[brandname].sort(comparePrice).reverse();
+  console.log(brands[brandname]);
+}
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
 // 2. Log the sort
 
-
-
-
+for (let brandname in brands){
+  brands[brandname].sort(compareDate).reverse();
+  console.log(brands[brandname]);
+}
 
 /**
  * 💶
