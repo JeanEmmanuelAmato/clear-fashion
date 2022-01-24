@@ -10,6 +10,7 @@ const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const selectBrand = document.querySelector("#brand-select");
 
 /**
  * Set global value
@@ -123,17 +124,44 @@ document.addEventListener('DOMContentLoaded', async () => {
   render(currentProducts, currentPagination);
 });
 
+// Feature 1 - Browse pages 
 /**
  * Select the number of page to display
  * @type {[type]}
  */
 
-selectPage.addEventListener('change', event => {
-  fetchProducts(parseInt(event.target.value), currentPagination.pageSize)
-    .then(setCurrentProducts)
-    .then(() => render(currentProducts, currentPagination));
+// selectPage.addEventListener('change', event => {
+//   fetchProducts(parseInt(event.target.value), currentPagination.pageSize)
+//     .then(setCurrentProducts)
+//     .then(() => render(currentProducts, currentPagination));
+// });
+ 
+selectPage.addEventListener('change', async (event) => {
+  const products = await fetchProducts(parseInt(event.target.value), currentPagination.pageSize);
+
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
 });
 
+// Feature 2 - Filter by brands
+
+// sectionProducts.addEventListener('change', async () => {
+//   const products = await fetchProducts(1, currentPagination.pageSize);
+//   console.log("hello");
+//   products.result = products.result.filter(product => product.brand == event.target.value);
+//   setCurrentProducts(products);
+//   render(currentProducts, currentPagination);
+// })
+
+selectBrand.addEventListener('change', async (event) => {
+  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+  console.log(products.result);
+
+  products.result = products.result.filter(product => product.brand == event.target.value);
+  console.log(products.result);
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+})
 
 
 
