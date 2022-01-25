@@ -96,11 +96,31 @@ const renderIndicators = pagination => {
 
   spanNbProducts.innerHTML = count;
 };
+/**
+ * Render brandselector
+ * @param {Array} products 
+ */
+const renderBrands = products => {
+  const brandsNames = [];
+  products.forEach(product => {
+    if (!brandsNames.includes(product.brand)){
+      brandsNames.push(product.brand);
+    }
+  })
+  let options = Array.from(brandsNames, brandname => `<option value="${brandname}">${brandname}</option>`);
+  options.unshift("<option value='none'>none</option>");
+  options.unshift("<option disabled value='null'>Select a brand</option>");
+  //console.log(options);
+  options = options.join('');
+  //console.log(options);
+  selectBrand.innerHTML = options;
+}
 
 const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
+  renderBrands(products);
 };
 
 /**
@@ -153,14 +173,21 @@ selectPage.addEventListener('change', async (event) => {
 //   render(currentProducts, currentPagination);
 // })
 
-selectBrand.addEventListener('change', async (event) => {
-  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
-  console.log(products.result);
+selectBrand.addEventListener('click', async (event) => {
+  
+  if (event.target.value == "none"){
+    const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
 
-  products.result = products.result.filter(product => product.brand == event.target.value);
-  console.log(products.result);
-  setCurrentProducts(products);
-  render(currentProducts, currentPagination);
+    setCurrentProducts(products);
+    render(currentProducts, currentPagination);
+  }
+  else{
+    const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+
+    products.result = products.result.filter(product => product.brand == event.target.value);
+    setCurrentProducts(products);
+    render(currentProducts, currentPagination);
+  }
 })
 
 
