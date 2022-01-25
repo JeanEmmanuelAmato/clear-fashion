@@ -149,12 +149,6 @@ document.addEventListener('DOMContentLoaded', async () => {
  * Select the number of page to display
  * @type {[type]}
  */
-
-// selectPage.addEventListener('change', event => {
-//   fetchProducts(parseInt(event.target.value), currentPagination.pageSize)
-//     .then(setCurrentProducts)
-//     .then(() => render(currentProducts, currentPagination));
-// });
  
 selectPage.addEventListener('change', async (event) => {
   const products = await fetchProducts(parseInt(event.target.value), currentPagination.pageSize);
@@ -164,14 +158,10 @@ selectPage.addEventListener('change', async (event) => {
 });
 
 // Feature 2 - Filter by brands
-
-// sectionProducts.addEventListener('change', async () => {
-//   const products = await fetchProducts(1, currentPagination.pageSize);
-//   console.log("hello");
-//   products.result = products.result.filter(product => product.brand == event.target.value);
-//   setCurrentProducts(products);
-//   render(currentProducts, currentPagination);
-// })
+/**
+ * Select the brand to filter
+ * @type {[type]}
+ */
 
 selectBrand.addEventListener('click', async (event) => {
   
@@ -190,6 +180,7 @@ selectBrand.addEventListener('click', async (event) => {
   }
 })
 
+// Features 3 - Filter by recent products
 
 
 
