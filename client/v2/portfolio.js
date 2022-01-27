@@ -11,7 +11,7 @@ const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const selectBrand = document.querySelector("#brand-select");
-
+const selectFilters = document.querySelector("#filter-select");
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -180,11 +180,31 @@ selectBrand.addEventListener('click', async (event) => {
   }
 })
 
-// Features 3 - Filter by recent products
+// Features 3 and 4 - Filter by recent products and reasonable price
 
+function compareDate(released){
+  let today = new Date();
+  released = new Date(released);
+  return today - released;
+}
 
+selectFilters.addEventListener('change', async (event) => {
+  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
 
+  if (event.target.value == "By reasonable price"){
+    products.result = products.result.filter(product => product.price <= 50);
+  }
+  else if (event.target.value == "By recently released"){
+    products.result = products.result.filter(product => compareDate(product.released) <= 1.2096e9);
+  }
+  else{}
 
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+
+})
+
+// Features 5 Sort by Price 
 
 
 
