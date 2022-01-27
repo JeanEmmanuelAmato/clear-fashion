@@ -15,6 +15,8 @@ const selectFilter = document.querySelector("#filter-select");
 const selectSort = document.querySelector("#sort-select");
 const spanNbNewProducts = document.querySelector("#nbNewProducts");
 const spanLastReleaseDate = document.querySelector("#last-release-date");
+//const btn = document.querySelector('');
+
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -67,6 +69,7 @@ const renderProducts = products => {
         <span>${product.brand}</span>
         <a href="${product.link}">${product.name}</a>
         <span>${product.price}</span>
+        <span><button value="Add to favorites">Add to favorite</button></span>
       </div>
     `;
     })
@@ -282,8 +285,17 @@ selectSort.addEventListener('change', async (event) => {
 
 // Feature 11 - Last released date indicator : cf the render part
 
+// Feature 13 - Save as favorite 
 
-
+btn.addEventListener('click', () => {
+  // if (btn.value == "Add to favorites"){
+  //   btn.value = "In favorites";
+  // }
+  // else{
+  //   btn.value = "Add to favorites";
+  // }
+  console.log();
+})
 
 
 
