@@ -13,12 +13,14 @@ const spanNbProducts = document.querySelector('#nbProducts');
 const selectBrand = document.querySelector("#brand-select");
 const selectFilter = document.querySelector("#filter-select");
 const selectSort = document.querySelector("#sort-select");
+const spanNbNewProducts = document.querySelector("#nbNewProducts");
 
 /**
  * Set global value
  * @param {Array} result - products to display
  * @param {Object} meta - pagination meta info
  */
+
 const setCurrentProducts = ({result, meta}) => {
   currentProducts = result;
   currentPagination = meta;
@@ -30,6 +32,7 @@ const setCurrentProducts = ({result, meta}) => {
  * @param  {Number}  [size=12] - size of the page
  * @return {Object}
  */
+
 const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
@@ -53,6 +56,7 @@ const fetchProducts = async (page = 1, size = 12) => {
  * Render list of products
  * @param  {Array} products
  */
+
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
@@ -93,15 +97,32 @@ const renderPagination = pagination => {
  * Render page selector
  * @param  {Object} pagination
  */
+
 const renderIndicators = pagination => {
   const {count} = pagination;
 
   spanNbProducts.innerHTML = count;
 };
+
+/**
+ * Render the total number of new products available
+ * @param {Object} pagination 
+ */
+
+const renderNbNewProducts = async (pagination) => {
+  const response = await fetch(
+    `https://clear-fashion-api.vercel.app?page=1&size=${pagination.count}` // à revoir car en dur actuellement
+  );
+  const body = await response.json();
+
+  spanNbNewProducts.innerHTML = body.data.result.filter(product => compareReleasedToToday(product.released) <= 1.2096e9).length;
+}
+
 /**
  * Render brandselector
  * @param {Array} products 
  */
+
 const renderBrands = products => {
   const brandsNames = [];
   products.forEach(product => {
@@ -122,6 +143,7 @@ const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
+  renderNbNewProducts(pagination);
   renderBrands(products);
 };
 
@@ -206,7 +228,7 @@ selectFilter.addEventListener('change', async (event) => {
 
 })
 
-// Features 5 and 6 - Sort by Price and Date 
+// Features 5 and 6 - Sort by Price and Date  
 
 function comparePrice(a,b){
   return a.price - b.price;
@@ -238,6 +260,12 @@ selectSort.addEventListener('change', async (event) => {
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 })
+
+// Feature 9 - Number of recent products indicator : cf the render part 
+
+// Feature 10 - p50, p90 and p95 price value indicator
+
+// Feature 11 - Last released date indicator
 
 
 
