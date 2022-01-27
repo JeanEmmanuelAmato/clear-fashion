@@ -11,7 +11,9 @@ const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const selectBrand = document.querySelector("#brand-select");
-const selectFilters = document.querySelector("#filter-select");
+const selectFilter = document.querySelector("#filter-select");
+const selectSort = document.querySelector("#sort-select");
+
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -182,20 +184,20 @@ selectBrand.addEventListener('click', async (event) => {
 
 // Features 3 and 4 - Filter by recent products and reasonable price
 
-function compareDate(released){
+function compareReleasedToToday(released){
   let today = new Date();
   released = new Date(released);
   return today - released;
 }
 
-selectFilters.addEventListener('change', async (event) => {
+selectFilter.addEventListener('change', async (event) => {
   const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
 
   if (event.target.value == "By reasonable price"){
     products.result = products.result.filter(product => product.price <= 50);
   }
   else if (event.target.value == "By recently released"){
-    products.result = products.result.filter(product => compareDate(product.released) <= 1.2096e9);
+    products.result = products.result.filter(product => compareReleasedToToday(product.released) <= 1.2096e9);
   }
   else{}
 
@@ -204,8 +206,38 @@ selectFilters.addEventListener('change', async (event) => {
 
 })
 
-// Features 5 Sort by Price 
+// Features 5 and 6 - Sort by Price and Date 
 
+function comparePrice(a,b){
+  return a.price - b.price;
+}
+
+function compareDate(a,b){
+  a = new Date(a.released);
+  b = new Date(b.released);
+  return a - b;
+}
+
+selectSort.addEventListener('change', async (event) => {
+  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+
+  if (event.target.value == "price-asc"){
+    products.result = products.result.sort(comparePrice);
+  }
+  else if (event.target.value == "price-desc"){
+    products.result = products.result.sort(comparePrice).reverse();
+  }
+  else if (event.target.value == "date-asc"){
+    products.result = products.result.sort(compareDate);
+  }
+  else if (event.target.value == "date-desc"){
+    products.result = products.result.sort(compareDate).reverse();
+  }
+  else{}
+
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+})
 
 
 
