@@ -14,7 +14,7 @@ const selectBrand = document.querySelector("#brand-select");
 const selectFilter = document.querySelector("#filter-select");
 const selectSort = document.querySelector("#sort-select");
 const spanNbNewProducts = document.querySelector("#nbNewProducts");
-
+const spanLastReleaseDate = document.querySelector("#last-release-date");
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -105,7 +105,7 @@ const renderIndicators = pagination => {
 };
 
 /**
- * Render the total number of new products available
+ * Render the total number of new products available (feature 9)
  * @param {Object} pagination 
  */
 
@@ -116,6 +116,20 @@ const renderNbNewProducts = async (pagination) => {
   const body = await response.json();
 
   spanNbNewProducts.innerHTML = body.data.result.filter(product => compareReleasedToToday(product.released) <= 1.2096e9).length;
+}
+
+/**
+ * Render the last release date (feature 11)
+ * @param {Object} pagination 
+ */
+
+ const renderLastReleaseDate = async (pagination) => {
+  const response = await fetch(
+    `https://clear-fashion-api.vercel.app?page=1&size=${pagination.count}` // à revoir car en dur actuellement
+  );
+  const body = await response.json();
+
+  spanLastReleaseDate.innerHTML = body.data.result.sort(compareDate)[body.data.result.length-1].released;
 }
 
 /**
@@ -144,6 +158,7 @@ const render = (products, pagination) => {
   renderPagination(pagination);
   renderIndicators(pagination);
   renderNbNewProducts(pagination);
+  renderLastReleaseDate(pagination);
   renderBrands(products);
 };
 
@@ -263,9 +278,9 @@ selectSort.addEventListener('change', async (event) => {
 
 // Feature 9 - Number of recent products indicator : cf the render part 
 
-// Feature 10 - p50, p90 and p95 price value indicator
+// Feature 10 - p50, p90 and p95 price value indicator : cf the render part 
 
-// Feature 11 - Last released date indicator
+// Feature 11 - Last released date indicator : cf the render part
 
 
 
