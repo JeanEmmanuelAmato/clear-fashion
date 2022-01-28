@@ -15,7 +15,7 @@ const selectFilter = document.querySelector("#filter-select");
 const selectSort = document.querySelector("#sort-select");
 const spanNbNewProducts = document.querySelector("#nbNewProducts");
 const spanLastReleaseDate = document.querySelector("#last-release-date");
-//const btn = document.querySelector('');
+//const btn = document.querySelector('.favButton');
 
 /**
  * Set global value
@@ -69,7 +69,7 @@ const renderProducts = products => {
         <span>${product.brand}</span>
         <a href="${product.link}">${product.name}</a>
         <span>${product.price}</span>
-        <span><button value="Add to favorites">Add to favorite</button></span>
+        <span><button class="favButton">Add to favorite</button></span>
       </div>
     `;
     })
@@ -287,15 +287,9 @@ selectSort.addEventListener('change', async (event) => {
 
 // Feature 13 - Save as favorite 
 
-btn.addEventListener('click', () => {
-  // if (btn.value == "Add to favorites"){
-  //   btn.value = "In favorites";
-  // }
-  // else{
-  //   btn.value = "Add to favorites";
-  // }
-  console.log();
-})
+// btn.addEventListener("click", event => {
+//   console.log("hello");
+// })
 
 
 
