@@ -18,7 +18,7 @@ const spanLastReleaseDate = document.querySelector("#last-release-date");
 const spanP50 = document.querySelector("#p50");
 const spanP90 = document.querySelector("#p90");
 const spanP95 = document.querySelector("#p95");
-//const btn = document.querySelector('.favButton');
+const btn = document.querySelector('input');
 
 /**
  * Set global value
@@ -72,7 +72,9 @@ const renderProducts = products => {
         <span>${product.brand}</span>
         <a href="${product.link}">${product.name}</a>
         <span>${product.price}</span>
-        <span><button class="favButton">Add to favorite</button></span>
+        
+        <span><input type="button" value="Add to favorites"></span>
+      
       </div>
     `;
     })
@@ -315,7 +317,6 @@ selectSort.addEventListener('change', async (event) => {
 // btn.addEventListener("click", event => {
 //   console.log("hello");
 // })
-
 
 
 
