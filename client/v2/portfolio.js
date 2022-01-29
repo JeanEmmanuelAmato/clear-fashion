@@ -15,6 +15,9 @@ const selectFilter = document.querySelector("#filter-select");
 const selectSort = document.querySelector("#sort-select");
 const spanNbNewProducts = document.querySelector("#nbNewProducts");
 const spanLastReleaseDate = document.querySelector("#last-release-date");
+const spanP50 = document.querySelector("#p50");
+const spanP90 = document.querySelector("#p90");
+const spanP95 = document.querySelector("#p95");
 //const btn = document.querySelector('.favButton');
 
 /**
@@ -136,7 +139,26 @@ const renderNbNewProducts = async (pagination) => {
 }
 
 /**
- * Render brandselector
+ * Render percentile price value (feature 10)
+ * @param {Object} products 
+ */
+
+const renderPercentile = async (pagination, p, spanP) => {
+  const response = await fetch(
+    `https://clear-fashion-api.vercel.app?page=1&size=${pagination.count}` // à revoir car en dur actuellement
+  );
+  const body = await response.json();
+
+  body.data.result.sort(comparePrice);
+
+  let k = Math.floor(p*pagination.count/100);
+
+  spanP.innerHTML = body.data.result[k].price;
+
+}
+
+/**
+ * Render brandselector (feature 2)
  * @param {Array} products 
  */
 
@@ -163,6 +185,9 @@ const render = (products, pagination) => {
   renderNbNewProducts(pagination);
   renderLastReleaseDate(pagination);
   renderBrands(products);
+  renderPercentile(pagination, 50, spanP50);
+  renderPercentile(pagination, 90, spanP90);
+  renderPercentile(pagination, 95, spanP95);
 };
 
 /**
