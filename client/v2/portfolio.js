@@ -5,6 +5,8 @@
 let currentProducts = [];
 let currentPagination = {};
 
+let favorites = [];
+
 // instantiate the selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
@@ -18,8 +20,8 @@ const spanLastReleaseDate = document.querySelector("#last-release-date");
 const spanP50 = document.querySelector("#p50");
 const spanP90 = document.querySelector("#p90");
 const spanP95 = document.querySelector("#p95");
-const btn = document.querySelector('input');
-
+const listOfItemsForAddingInFavorite = document.querySelector("#favorites-setup");
+let btn = document.querySelector("input");
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -72,9 +74,6 @@ const renderProducts = products => {
         <span>${product.brand}</span>
         <a href="${product.link}">${product.name}</a>
         <span>${product.price}</span>
-        
-        <span><input type="button" value="Add to favorites"></span>
-      
       </div>
     `;
     })
@@ -180,6 +179,12 @@ const renderBrands = products => {
   selectBrand.innerHTML = options;
 }
 
+const renderProductsToAddToFavorites = products =>{
+  let options = Array.from(products, product => `<option value="${product.uuid}">${product.brand} : ${product.name}</option>`).join('');
+
+  listOfItemsForAddingInFavorite.innerHTML = options;
+}
+
 const render = (products, pagination) => {
   renderProducts(products);
   renderPagination(pagination);
@@ -190,6 +195,7 @@ const render = (products, pagination) => {
   renderPercentile(pagination, 50, spanP50);
   renderPercentile(pagination, 90, spanP90);
   renderPercentile(pagination, 95, spanP95);
+  renderProductsToAddToFavorites(products);
 };
 
 /**
@@ -314,9 +320,25 @@ selectSort.addEventListener('change', async (event) => {
 
 // Feature 13 - Save as favorite 
 
-// btn.addEventListener("click", event => {
-//   console.log("hello");
-// })
+btn.addEventListener("click", async() => {
+  //console.log("hello");
+  //console.log(listOfItemsForAddingInFavorite.value);
+  favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+  //console.log(favorites);
+  let productToAddFav = favorites.find(product => product.uuid == listOfItemsForAddingInFavorite.value);
+
+  if (productToAddFav === undefined) {
+    const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+    productToAddFav = products.result.find(product => product.uuid == listOfItemsForAddingInFavorite.value);
+
+    favorites.push(productToAddFav);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    window.alert(`Le produit ${productToAddFav.name} de la marque ${productToAddFav.brand} vient d'être ajouté à vos favoris.`);
+  }
+  else{
+    window.alert(`Le produit ${productToAddFav.name} de la marque ${productToAddFav.brand} a déjà été ajouté à vos favoris.`)
+  }
+})
 
 
 
