@@ -255,7 +255,7 @@ selectBrand.addEventListener('click', async (event) => {
   }
 })
 
-// Features 3 and 4 - Filter by recent products and reasonable price
+// Features 3, 4 and 15 - Filter by recent products, reasonable priced, and favorite products
 
 function compareReleasedToToday(released){
   let today = new Date();
@@ -271,6 +271,10 @@ selectFilter.addEventListener('change', async (event) => {
   }
   else if (event.target.value == "By recently released"){
     products.result = products.result.filter(product => compareReleasedToToday(product.released) <= 1.2096e9);
+  }
+  else if (event.target.value == "By favorite"){
+    favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    products.result = favorites;
   }
   else{}
 
