@@ -22,6 +22,7 @@ const spanP90 = document.querySelector("#p90");
 const spanP95 = document.querySelector("#p95");
 const listOfItemsForAddingInFavorite = document.querySelector("#favorites-setup");
 let btn = document.querySelector("input");
+
 /**
  * Set global value
  * @param {Array} result - products to display
