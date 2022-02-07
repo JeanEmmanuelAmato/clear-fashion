@@ -1,4 +1,5 @@
 const montlimartbrand = require('./sites/montlimart');
+var fs = require('fs');
 
 async function sandbox (eshop = 'https://www.montlimart.com/toute-la-collection.html?limit=all') {
   try {
@@ -7,6 +8,10 @@ async function sandbox (eshop = 'https://www.montlimart.com/toute-la-collection.
     const products = await montlimartbrand.scrape(eshop);
 
     console.log(products);
+    console.log(products.length);
+
+    // let json = JSON.stringify(products);
+    // fs.writeFile('myjsonfile.json', json, 'utf8', callback);
     console.log('done');
     process.exit(0);
   } catch (e) {

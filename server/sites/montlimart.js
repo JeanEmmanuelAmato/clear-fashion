@@ -11,7 +11,7 @@ const {'v5': uuidv5} = require('uuid');
 const parse = (data) => {
     const $ = cheerio.load(data, {'xmlMode': true});
     return $('.item').map((i, element)=> {
-        const link = $(element).find('a').attr('href');
+        const link = `${$(element).find('a').attr('href')}`;
         
         return {
             'link': link,
@@ -22,7 +22,7 @@ const parse = (data) => {
             'name' : $(element).find('.product-name').text().trim()
             .replace(/\s/g, ' '),
             'photo' : $(element).find('img').attr('src'),
-            //'_id' : uuidv5(link, uuidv5.URL)    
+            '_id' : uuidv5(link, uuidv5.URL)    
         };
     }).get();
 };
