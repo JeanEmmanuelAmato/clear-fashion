@@ -9,7 +9,7 @@ const {'v5': uuidv5} = require('uuid');
  */
 const parse = data => {
   const $ = cheerio.load(data);
-
+  
   return $('.productList-container .productList')
     .map((i, element) => {
       const link = `https://www.dedicatedbrand.com${$(element)
