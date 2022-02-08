@@ -1,28 +1,39 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
+const {'v5': uuidv5} = require('uuid');
 
 /**
- * Parse webpage e-shop
+ * Parse webpage restaurant
  * @param  {String} data - html response
- * @return {Array} products
+ * @return {Object} restaurant
  */
 const parse = data => {
   const $ = cheerio.load(data);
-
+  
   return $('.productList-container .productList')
     .map((i, element) => {
-      const name = $(element)
-        .find('.productList-title')
-        .text()
-        .trim()
-        .replace(/\s/g, ' ');
-      const price = parseInt(
-        $(element)
-          .find('.productList-price')
-          .text()
-      );
+      const link = `https://www.dedicatedbrand.com${$(element)
+        .find('.productList-link')
+        .attr('href')}`;
 
-      return {name, price};
+      return {
+        link,
+        'brand': 'dedicated',
+        'price': parseInt(
+          $(element)
+            .find('.productList-price')
+            .text()
+        ),
+        'name': $(element)
+          .find('.productList-title')
+          .text()
+          .trim()
+          .replace(/\s/g, ' '),
+        'photo': $(element)
+          .find('.productList-image img')
+          .attr('src'),
+        '_id': uuidv5(link, uuidv5.URL)
+      };
     })
     .get();
 };
