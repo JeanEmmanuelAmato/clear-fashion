@@ -9,7 +9,8 @@ const {'v5': uuidv5} = require('uuid');
  */
 const parse = data => {
   const $ = cheerio.load(data);
-  
+  const released = new Date();
+
   return $('.productList-container .productList')
     .map((i, element) => {
       const link = `https://www.dedicatedbrand.com${$(element)
@@ -30,9 +31,10 @@ const parse = data => {
           .trim()
           .replace(/\s/g, ' '),
         'photo': $(element)
-          .find('.productList-image img')
-          .attr('src'),
-        '_id': uuidv5(link, uuidv5.URL)
+          .find('img')
+          .attr('data-src'),
+        '_id': uuidv5(link, uuidv5.URL),
+        'release date' : released  
       };
     })
     .get();
