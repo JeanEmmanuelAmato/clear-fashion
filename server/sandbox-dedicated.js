@@ -12,7 +12,7 @@ async function sandbox2 (eshop = 'https://www.dedicatedbrand.com/en/men/all-men'
       if (products.length == 0){
         console.log("End of scraping");
 
-        console.log(`Total number of products : ${result.length}`);
+        console.log(`Total number of products : ${result.length}\nTotal number of pages ${i-1}`);
         process.exit(0);
       }
       else{
