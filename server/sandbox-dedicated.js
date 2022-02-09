@@ -1,6 +1,6 @@
 const dedicatedbrand = require('./sites/dedicatedbrand');
 
-async function sandbox2 (eshop = 'https://www.dedicatedbrand.com/en/men/all-men') {
+async function sandbox2 () {
   try {
     let result = [];
     for (let i = 1; ; i++)
