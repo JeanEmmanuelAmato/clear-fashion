@@ -1,26 +1,30 @@
 const dedicatedbrand = require('./sites/dedicatedbrand');
 
-async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/all-men') {
+async function sandbox2 (eshop = 'https://www.dedicatedbrand.com/en/men/all-men') {
   try {
-    console.log(`🕵️‍♀️  browsing ${eshop} source`);
+    let result = [];
+    for (let i = 1; ; i++)
+    {
+      let eshop = 'https://www.dedicatedbrand.com/en/men/all-men?p=' + i;
+      console.log(`🕵️‍♀️  browsing ${eshop} source`);
 
-    const products = await dedicatedbrand.scrape(eshop);
+      let products = await dedicatedbrand.scrape(eshop);
+      if (products.length == 0){
+        console.log("End of scraping");
 
-    console.log(products);
-    console.log(products.length);
-    console.log('done');
-    process.exit(0);
+        console.log(`Total number of products : ${result.length}`);
+        process.exit(0);
+      }
+      else{
+        console.log(products);
+        console.log(products.length);
+        console.log('done')
+        products.forEach(product => result.push(product));
+      }
+    }
   } catch (e) {
     console.error(e);
     process.exit(1);
   }
 }
-
-const [,, eshop] = process.argv;
-
-sandbox(eshop);
-
-// for(let i = 1; i < 11; i++) {
-//     let eshop = `https://www.dedicatedbrand.com/en/men/all-men?page=${i}`;
-//     sandbox(eshop)
-// }
+sandbox2()
