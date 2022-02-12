@@ -15,16 +15,16 @@ const parse = (data) => {
         const released = new Date();
 
         return {
-            'link': link,
-            'brand' : "montlimart",
-            'price' : parseInt(
+            "link": link,
+            "brand" : "montlimart",
+            "price" : parseInt(
                 $(element).find('.price').text()
             ),
-            'name' : $(element).find('.product-name').text().trim()
+            "name" : $(element).find('.product-name').text().trim()
             .replace(/\s/g, ' '),
-            'photo' : $(element).find('img').attr('src'),
-            '_id' : uuidv5(link, uuidv5.URL),  
-            'release date' : released  
+            "photo" : $(element).find('img').attr('src'),
+            "_id" : uuidv5(link, uuidv5.URL),  
+            "release date" : released.toLocaleDateString()
         };
     }).get();
 };

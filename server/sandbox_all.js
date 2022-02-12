@@ -18,7 +18,7 @@ async function sandbox () {
     products_adresse.forEach(product => results.push(product));
 
     // for montlimart
-    const eshop_montlimart = 'https://www.montlimart.com/toute-la-collection.html?limit=all'
+    const eshop_montlimart = 'https://www.montlimart.com/toute-la-collection.html'
     console.log(`🕵️‍♀️  browsing ${eshop_montlimart} source`);
 
     const products_montlimart = await montlimartbrand.scrape(eshop_montlimart);
@@ -52,14 +52,9 @@ async function sandbox () {
     console.log(`Total number of products scrapped: ${results.length}`)
 
     // JSON file
-    const data = JSON.stringify(results);
+    const data = JSON.stringify(results, null, 2);
     //console.log(data);
-    fs.writeFile('products_for_all_brands.json', data, (err) => {
-        if (err) {
-            throw err;
-        }
-        console.log("JSON data is saved.");
-    });
+    fs.writeFileSync('products_for_all_brands.json', data);
 
     console.log('done');
     process.exit(0);

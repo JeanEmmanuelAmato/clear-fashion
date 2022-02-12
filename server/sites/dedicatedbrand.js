@@ -19,22 +19,22 @@ const parse = data => {
 
       return {
         link,
-        'brand': 'dedicated',
-        'price': parseInt(
+        "brand": "dedicated",
+        "price": parseInt(
           $(element)
             .find('.productList-price')
             .text()
         ),
-        'name': $(element)
+        "name": $(element)
           .find('.productList-title')
           .text()
           .trim()
           .replace(/\s/g, ' '),
-        'photo': $(element)
+        "photo": $(element)
           .find('img')
           .attr('data-src'),
-        '_id': uuidv5(link, uuidv5.URL),
-        'release date' : released  
+        "_id": uuidv5(link, uuidv5.URL),
+        "release date" : released.toLocaleDateString()  
       };
     })
     .get();
