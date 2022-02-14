@@ -49,10 +49,18 @@ async function sandbox () {
       }
     }
     total_products_dedicated.forEach(product => results.push(product));
-    console.log(`Total number of products scrapped: ${results.length}`)
+
+    clean_results = [];
+    results.forEach(product => {
+      if (product.link != "undefined")
+      {
+        clean_results.push(product);
+      }
+    });
+    console.log(`Total number of products scrapped: ${clean_results.length}`)
 
     // JSON file
-    const data = JSON.stringify(results, null, 2);
+    const data = JSON.stringify(clean_results, null, 2);
     //console.log(data);
     fs.writeFileSync('products_for_all_brands.json', data);
 
