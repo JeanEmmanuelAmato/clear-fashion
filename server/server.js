@@ -1,7 +1,7 @@
 const {MongoClient} = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://AmatoJeanEmmanuel:clearfashion@clearfashion.yjbvj.mongodb.net/ClearFashion?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
-//const products = require('products_for_all_brands')
+const products = require('products_for_all_brands');
 let db, collection;
 
 const connect = async () => {
@@ -15,5 +15,5 @@ const connect = async () => {
     } 
 }
 
-connect()
+//connect()
 
