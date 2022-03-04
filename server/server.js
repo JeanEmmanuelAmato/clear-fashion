@@ -27,5 +27,41 @@ const insertProduct = async () => {
     }
 }
 
-insertProduct()
+//insertProduct()
+const findProductBrand = async (brand) => {
+    const products = await collection.find({brand:brand}).toArray();
 
+    console.log(products);
+}
+
+const findProductLessThanPrice = async (price) => {
+    const products = await collection.find({price : {$lt:price}}).toArray();
+
+    console.log(products);
+}
+
+const findProductSortedByPrice = async () => {
+    const products = await collection.find().sort({price: 1}).toArray();
+
+    console.log(products);
+} 
+
+const doSomeStuff = async () => {
+    try {
+        await connect();
+        collection = db.collection('products');
+
+        // some functions 
+        const brands =["adresse", "montlimart", "dedicated"]
+        findProductBrand(brands[1])
+
+        findProductLessThanPrice(50)
+
+        findProductSortedByPrice()
+    }
+    catch(e){
+        console.error(e);
+    }
+}
+
+doSomeStuff()
