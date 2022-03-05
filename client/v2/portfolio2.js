@@ -4,7 +4,6 @@
 // current products on the page
 let currentProducts = [];
 let currentPagination = {};
-
 let favorites = [];
 
 // instantiate the selectors
@@ -245,106 +244,111 @@ selectPage.addEventListener('change', async (event) => {
  * @type {[type]}
  */
 
-selectBrand.addEventListener('change', async (event) => {
+ selectBrand.addEventListener('click', async (event) => {
   
-  if (event.target.value == "All brands"){
-    render(currentProducts, currentPagination);
-  }
-  else{
-    currentProducts = currentProducts.filter(product => product.brand == event.target.value)
-    render(currentProducts, currentPagination);
-  }
-})
-
-// Features 3, 4 and 15 - Filter by recent products, reasonable priced, and favorite products
-
-function compareReleasedToToday(released){
-  let today = new Date();
-  released = new Date(released);
-  return today - released;
-}
-
-selectFilter.addEventListener('change', async (event) => {
-  //const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+    if (event.target.value == "none"){
+      const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
   
-  if (event.target.value == "By reasonable price"){
-    render(currentProducts.filter(product => product.price <= 50), currentPagination);
-  }
-  else if (event.target.value == "By recently released"){
-    render(currentProducts.filter(product => compareReleasedToToday(product.released) <= 1.2096e9), currentPagination);
-  }
-  else if (event.target.value == "By favorite"){
-    favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    //products = favorites;
-    render(favorites, currentPagination);
-  }
-  else{
-    render(currentProducts, currentPagination);
-  }
-
-})
-
-// Features 5 and 6 - Sort by Price and Date  
-
-function comparePrice(a,b){
-  return a.price - b.price;
-}
-
-function compareDate(a,b){
-  a = new Date(a.released);
-  b = new Date(b.released);
-  return a - b;
-}
-
-selectSort.addEventListener('change', async (event) => {
-  //console.log(currentProducts)
-  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+      setCurrentProducts(products);
+      render(currentProducts, currentPagination);
+    }
+    else{
+      const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
   
-  if (event.target.value == "price-asc"){
-    products.result = products.result.sort(comparePrice);
+      products.result = products.result.filter(product => product.brand == event.target.value);
+      setCurrentProducts(products);
+      render(currentProducts, currentPagination);
+    }
+  })
+  
+  // Features 3, 4 and 15 - Filter by recent products, reasonable priced, and favorite products
+  
+  function compareReleasedToToday(released){
+    let today = new Date();
+    released = new Date(released);
+    return today - released;
   }
-  else if (event.target.value == "price-desc"){
-    products.result = products.result.sort(comparePrice).reverse();
-  }
-  else if (event.target.value == "date-asc"){
-    products.result = products.result.sort(compareDate);
-  }
-  else if (event.target.value == "date-desc"){
-    products.result = products.result.sort(compareDate).reverse();
-  }
-  else{}
-
-  setCurrentProducts(products);
-  render(currentProducts, currentPagination);
-})
-
-// Feature 9 - Number of recent products indicator : cf the render part 
-
-// Feature 10 - p50, p90 and p95 price value indicator : cf the render part 
-
-// Feature 11 - Last released date indicator : cf the render part
-
-// Feature 13 - Save as favorite 
-
-btn.addEventListener("click", async() => {
-  //console.log("hello");
-  //console.log(listOfItemsForAddingInFavorite.value);
-  favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-  //console.log(favorites);
-  let productToAddFav = favorites.find(product => product.uuid == listOfItemsForAddingInFavorite.value);
-
-  if (productToAddFav === undefined) {
+  
+  selectFilter.addEventListener('change', async (event) => {
     const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
-    productToAddFav = products.result.find(product => product.uuid == listOfItemsForAddingInFavorite.value);
-
-    favorites.push(productToAddFav);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    window.alert(`Le produit ${productToAddFav.name} de la marque ${productToAddFav.brand} vient d'être ajouté à vos favoris.`);
+  
+    if (event.target.value == "By reasonable price"){
+      products.result = products.result.filter(product => product.price <= 50);
+    }
+    else if (event.target.value == "By recently released"){
+      products.result = products.result.filter(product => compareReleasedToToday(product.released) <= 1.2096e9);
+    }
+    else if (event.target.value == "By favorite"){
+      favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+      products.result = favorites;
+    }
+    else{}
+  
+    setCurrentProducts(products);
+    render(currentProducts, currentPagination);
+  
+  })
+  
+  // Features 5 and 6 - Sort by Price and Date  
+  
+  function comparePrice(a,b){
+    return a.price - b.price;
   }
-  else{
-    window.alert(`Le produit ${productToAddFav.name} de la marque ${productToAddFav.brand} a déjà été ajouté à vos favoris.`)
+  
+  function compareDate(a,b){
+    a = new Date(a.released);
+    b = new Date(b.released);
+    return a - b;
   }
-})
+  
+  selectSort.addEventListener('change', async (event) => {
+    const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+  
+    if (event.target.value == "price-asc"){
+      products.result = products.result.sort(comparePrice);
+    }
+    else if (event.target.value == "price-desc"){
+      products.result = products.result.sort(comparePrice).reverse();
+    }
+    else if (event.target.value == "date-asc"){
+      products.result = products.result.sort(compareDate);
+    }
+    else if (event.target.value == "date-desc"){
+      products.result = products.result.sort(compareDate).reverse();
+    }
+    else{}
+  
+    setCurrentProducts(products);
+    render(currentProducts, currentPagination);
+  })
+  
+  // Feature 9 - Number of recent products indicator : cf the render part 
+  
+  // Feature 10 - p50, p90 and p95 price value indicator : cf the render part 
+  
+  // Feature 11 - Last released date indicator : cf the render part
+  
+  // Feature 13 - Save as favorite 
+  
+  btn.addEventListener("click", async() => {
+    //console.log("hello");
+    //console.log(listOfItemsForAddingInFavorite.value);
+    favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    //console.log(favorites);
+    let productToAddFav = favorites.find(product => product.uuid == listOfItemsForAddingInFavorite.value);
+  
+    if (productToAddFav === undefined) {
+      const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+      productToAddFav = products.result.find(product => product.uuid == listOfItemsForAddingInFavorite.value);
+  
+      favorites.push(productToAddFav);
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      window.alert(`Le produit ${productToAddFav.name} de la marque ${productToAddFav.brand} vient d'être ajouté à vos favoris.`);
+    }
+    else{
+      window.alert(`Le produit ${productToAddFav.name} de la marque ${productToAddFav.brand} a déjà été ajouté à vos favoris.`)
+    }
+  })
 
 
 
