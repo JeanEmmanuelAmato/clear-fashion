@@ -164,16 +164,21 @@ const renderPercentile = async (pagination, p, spanP) => {
  * @param {Array} products 
  */
 
-const renderBrands = products => {
-  const brandsNames = [];
-  products.forEach(product => {
-    if (!brandsNames.includes(product.brand)){
-      brandsNames.push(product.brand);
-    }
-  })
+const renderBrands = async() => {
+  
+  // products.forEach(product => {
+  //   if (!brandsNames.includes(product.brand)){
+  //     brandsNames.push(product.brand);
+  //   }
+  // })
+  const response = await fetch(
+    `https://clear-fashion-api.vercel.app/brands` // à revoir car en dur actuellement
+  );
+  const body = await response.json();
+  const brandsNames = body.data.result
   let options = Array.from(brandsNames, brandname => `<option value="${brandname}">${brandname}</option>`);
-  options.unshift("<option value='none'>none</option>");
-  options.unshift("<option disabled value='null'>Select a brand</option>");
+  options.unshift("<option value='All brands'>All Brands</option>");
+  //options.unshift("<option disabled value='null'>Select a brand</option>");
   //console.log(options);
   options = options.join('');
   //console.log(options);
@@ -192,7 +197,7 @@ const render = (products, pagination) => {
   renderIndicators(pagination);
   renderNbNewProducts(pagination);
   renderLastReleaseDate(pagination);
-  renderBrands(products);
+  //renderBrands(products);
   renderPercentile(pagination, 50, spanP50);
   renderPercentile(pagination, 90, spanP90);
   renderPercentile(pagination, 95, spanP95);
@@ -217,6 +222,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
+  renderBrands(products)
 });
 
 // Feature 1 - Browse pages 
@@ -230,6 +236,7 @@ selectPage.addEventListener('change', async (event) => {
 
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
+  
 });
 
 // Feature 2 - Filter by brands
@@ -238,19 +245,13 @@ selectPage.addEventListener('change', async (event) => {
  * @type {[type]}
  */
 
-selectBrand.addEventListener('click', async (event) => {
+selectBrand.addEventListener('change', async (event) => {
   
-  if (event.target.value == "none"){
-    const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
-
-    setCurrentProducts(products);
+  if (event.target.value == "All brands"){
     render(currentProducts, currentPagination);
   }
   else{
-    const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
-
-    products.result = products.result.filter(product => product.brand == event.target.value);
-    setCurrentProducts(products);
+    currentProducts = currentProducts.filter(product => product.brand == event.target.value)
     render(currentProducts, currentPagination);
   }
 })
@@ -264,22 +265,22 @@ function compareReleasedToToday(released){
 }
 
 selectFilter.addEventListener('change', async (event) => {
-  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
-
+  //const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+  
   if (event.target.value == "By reasonable price"){
-    products.result = products.result.filter(product => product.price <= 50);
+    render(currentProducts.filter(product => product.price <= 50), currentPagination);
   }
   else if (event.target.value == "By recently released"){
-    products.result = products.result.filter(product => compareReleasedToToday(product.released) <= 1.2096e9);
+    render(currentProducts.filter(product => compareReleasedToToday(product.released) <= 1.2096e9), currentPagination);
   }
   else if (event.target.value == "By favorite"){
     favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    products.result = favorites;
+    //products = favorites;
+    render(favorites, currentPagination);
   }
-  else{}
-
-  setCurrentProducts(products);
-  render(currentProducts, currentPagination);
+  else{
+    render(currentProducts, currentPagination);
+  }
 
 })
 
@@ -296,8 +297,9 @@ function compareDate(a,b){
 }
 
 selectSort.addEventListener('change', async (event) => {
+  //console.log(currentProducts)
   const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
-
+  
   if (event.target.value == "price-asc"){
     products.result = products.result.sort(comparePrice);
   }
@@ -343,3 +345,34 @@ btn.addEventListener("click", async() => {
     window.alert(`Le produit ${productToAddFav.name} de la marque ${productToAddFav.brand} a déjà été ajouté à vos favoris.`)
   }
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
