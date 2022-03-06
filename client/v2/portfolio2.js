@@ -246,7 +246,7 @@ selectPage.addEventListener('change', async (event) => {
 
  selectBrand.addEventListener('click', async (event) => {
   
-    if (event.target.value == "none"){
+    if (event.target.value == "All brands"){
       const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
   
       setCurrentProducts(products);
@@ -302,24 +302,24 @@ selectPage.addEventListener('change', async (event) => {
   }
   
   selectSort.addEventListener('change', async (event) => {
-    const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
+    //const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
   
     if (event.target.value == "price-asc"){
-      products.result = products.result.sort(comparePrice);
+      render(currentProducts.sort(comparePrice), currentPagination);
     }
     else if (event.target.value == "price-desc"){
-      products.result = products.result.sort(comparePrice).reverse();
+      render(currentProducts.sort(comparePrice).reverse(), currentPagination);
     }
     else if (event.target.value == "date-asc"){
-      products.result = products.result.sort(compareDate);
+      render(currentProducts.sort(compareDate), currentPagination);
     }
     else if (event.target.value == "date-desc"){
-      products.result = products.result.sort(compareDate).reverse();
+      render(currentProducts.sort(compareDate).reverse(), currentPagination);
     }
-    else{}
+    else{render(currentProducts, currentPagination);}
   
-    setCurrentProducts(products);
-    render(currentProducts, currentPagination);
+    //setCurrentProducts(products);
+    //render(currentProducts, currentPagination);
   })
   
   // Feature 9 - Number of recent products indicator : cf the render part 
