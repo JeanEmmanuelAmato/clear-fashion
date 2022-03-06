@@ -271,21 +271,26 @@ selectPage.addEventListener('change', async (event) => {
   
   selectFilter.addEventListener('change', async (event) => {
     const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize);
-  
+
     if (event.target.value == "By reasonable price"){
-      products.result = products.result.filter(product => product.price <= 50);
+      //products.result = products.result.filter(product => product.price <= 50);
+      render(currentProducts.filter(product => product.price <= 50), currentPagination);
     }
     else if (event.target.value == "By recently released"){
-      products.result = products.result.filter(product => compareReleasedToToday(product.released) <= 1.2096e9);
+      //products.result = products.result.filter(product => compareReleasedToToday(product.released) <= 1.2096e9);
+      ender(currentProducts.filter(product => compareReleasedToToday(product.released), currentPagination));
     }
     else if (event.target.value == "By favorite"){
       favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
       products.result = favorites;
+      render(favorites, currentPagination);
     }
-    else{}
+    else{
+      render(currentProducts, currentPagination);
+    }
   
-    setCurrentProducts(products);
-    render(currentProducts, currentPagination);
+    //setCurrentProducts(products);
+    //render(currentProducts, currentPagination);
   
   })
   
