@@ -6,7 +6,7 @@ const {MongoClient} = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://AmatoJeanEmmanuel:clearfashion@clearfashion.yjbvj.mongodb.net/ClearFashion?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
 
-const {ObjectId} = require('mongodb');
+//const {ObjectId} = require('mongodb');
 
 const PORT = 8092;
 
@@ -48,3 +48,8 @@ app.get("/products/:id", (request, response) => {
       response.send(result);
   });
 });
+
+app.get("/products/search", (request, response) => {
+  const filters = request.query
+  response.send(filters)
+})
