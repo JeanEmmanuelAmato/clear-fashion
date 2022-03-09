@@ -23,18 +23,25 @@ app.get('/', (request, response) => {
   response.send({'ack': true});
 });
 
-app.get('/products/search', (request, response) => {
-  const brand = request.query.brand;
-  collection.findOne({"brand": brand}, (error, result) => {
-    if(error) {
-        return response.status(500).send(error);
-    }
-    response.send(result);
-  });
+app.get('/products/search', async(request, response) => {
+  let limit = 12;
+  let filter = request.query;
+
+  if ("limit" in filter) {
+    limit = parseInt(request.query.limit);
+    delete filter["limit"];
+  }
+
+  if ("price" in filter){
+    filter["price"] = {$lt:parseInt(filter["price"])}
+  }
+  const products = await collection.find(filter).limit(limit).toArray();
+
+  response.send(products);
 });
 
 app.get("/products/:id", (request, response) => {
-  collection.findAll({ "_id": request.params.id }, (error, result) => {
+  collection.findOne({ "_id": request.params.id }, (error, result) => {
       if(error) {
           return response.status(500).send(error);
       }
