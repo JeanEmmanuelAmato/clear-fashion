@@ -24,20 +24,25 @@ app.get('/', (request, response) => {
 });
 
 app.get('/products/search', async(request, response) => {
-  let limit = 12;
-  let filter = request.query;
+  try {
+    let limit = 12;
+    let filter = request.query;
 
-  if ("limit" in filter) {
-    limit = parseInt(request.query.limit);
-    delete filter["limit"];
+    if ("limit" in filter) {
+      limit = parseInt(request.query.limit);
+      delete filter["limit"];
+    }
+
+    if ("price" in filter){
+      filter["price"] = {$lt:parseInt(filter["price"])}
+    }
+    
+    const products = await collection.find(filter).limit(limit).toArray();
+
+    response.send(products);
+  }catch (error) {
+    response.status(500).send(error);
   }
-
-  if ("price" in filter){
-    filter["price"] = {$lt:parseInt(filter["price"])}
-  }
-  const products = await collection.find(filter).limit(limit).toArray();
-
-  response.send(products);
 });
 
 app.get("/products/:id", (request, response) => {
