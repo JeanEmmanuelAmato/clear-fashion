@@ -23,7 +23,25 @@ app.get('/', (request, response) => {
   response.send({'ack': true});
 });
 
-//app.listen(PORT);
+app.get('/products/search', (request, response) => {
+  const brand = request.query.brand;
+  collection.findOne({"brand": brand}, (error, result) => {
+    if(error) {
+        return response.status(500).send(error);
+    }
+    response.send(result);
+  });
+});
+
+app.get("/products/:id", (request, response) => {
+  collection.findAll({ "_id": request.params.id }, (error, result) => {
+      if(error) {
+          return response.status(500).send(error);
+      }
+      response.send(result);
+  });
+});
+
 
 app.listen(PORT, () => {
   MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true}, (error, client)=>{
@@ -39,15 +57,3 @@ app.listen(PORT, () => {
 
 console.log(`📡 Running on port ${PORT}`);
 
-app.get("/products/:id", (request, response) => {
-  collection.findOne({ "_id": request.params.id }, (error, result) => {
-      if(error) {
-          return response.status(500).send(error);
-      }
-      response.send(result);
-  });
-});
-
-app.get('/search', (request, response) => {
-  
-});
