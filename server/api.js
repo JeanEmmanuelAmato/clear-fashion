@@ -24,22 +24,36 @@ app.get('/', (request, response) => {
 });
 
 app.get('/products/search', async(request, response) => {
+  // limit/brand/price/sortby
   try {
     let limit = 12;
     let filter = request.query;
+    let sortby = "";
+    let products;
 
     if ("limit" in filter) {
       limit = parseInt(request.query.limit);
       delete filter["limit"];
     }
-
-    if ("price" in filter){
+    if ("sortby" in filter) {
+      sortby = request.query.sortby;
+      delete filter["sortby"];
+    }
+    if ("price" in filter) {
       filter["price"] = {$lt:parseInt(filter["price"])}
     }
-    
-    const products = await collection.find(filter).limit(limit).toArray();
 
+    switch (sortby){
+      case "price":
+        products = await collection.find(filter).sort({price: 1}).limit(limit).toArray();
+        break;
+      default:
+        products = await collection.find(filter).limit(limit).toArray();
+    }
+    // const products = await collection.find(filter).sort({sortby: 1}).limit(limit).toArray();
+    
     response.send(products);
+    
   }catch (error) {
     response.status(500).send(error);
   }

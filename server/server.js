@@ -52,12 +52,12 @@ const doSomeStuff = async () => {
         collection = db.collection('products');
 
         // some functions 
-        const brands =["adresse", "montlimart", "dedicated"]
-        findProductBrand(brands[1])
+        const brands =["adresse", "montlimart", "dedicated"];
+        findProductBrand(brands[1]);
 
-        findProductLessThanPrice(50)
+        findProductLessThanPrice(50);
 
-        findProductSortedByPrice()
+        findProductSortedByPrice();
     }
     catch(e){
         console.error(e);
