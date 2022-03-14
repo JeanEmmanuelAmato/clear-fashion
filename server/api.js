@@ -1,13 +1,14 @@
 const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
-const { calculateLimitAndOffset, paginate } = require('paginate-info')
+const { calculateLimitAndOffset, paginate } = require('paginate-info');
 
+let db, collection;
 const {MongoClient} = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://AmatoJeanEmmanuel:clearfashion@clearfashion.yjbvj.mongodb.net/ClearFashion?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
 
-
+//console.log("je passe ici");
 const PORT = 8092;
 
 const app = express();
@@ -19,6 +20,21 @@ app.use(cors());
 app.use(helmet());
 
 app.options('*', cors());
+
+const connect = () => {
+  console.log("Currently connecting...");
+  MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true}, (error, client)=>{
+    if(error) {
+      throw error;
+  }
+    db = client.db(MONGODB_DB_NAME);
+    collection = db.collection("products");
+    console.log("Connected to `" + MONGODB_DB_NAME + "`!");
+    app.listen(PORT);
+  });
+}
+//console.log("Je passe ici");
+connect();
 
 app.get('/', (request, response) => {
   response.send({'ack': true});
@@ -77,17 +93,18 @@ app.get('/products/search', async(request, response) => {
   }
 });
 
-// app.get("/products", async(request, response) => {
-//   try{
-//     let products = await collection.find({}).toArray();
-//     response.send(products);
-//   }
-//   catch (error) {
-//     response.status(500).send(error);
-//   }
-// });
+app.get("/products", async(request, response) => {
+  try{
+    let products = await collection.find({}).toArray();
+    response.send(products);
+  }
+  catch (error) {
+    response.status(500).send(error);
+  }
+});
 
 app.get("/products/:id", (request, response) => {
+  console.log(collection)
   collection.findOne({ "_id": request.params.id }, (error, result) => {
       if(error) {
           return response.status(500).send(error);
@@ -96,16 +113,5 @@ app.get("/products/:id", (request, response) => {
   });
 });
 
-app.listen(PORT, () => {
-  MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true}, (error, client)=>{
-    if(error) {
-      throw error;
-  }
-    db = client.db(MONGODB_DB_NAME);
-    collection = db.collection("products");
-    console.log("Connected to `" + MONGODB_DB_NAME + "`!");
-  });
 
-});
-
-console.log(`📡 Running on port ${PORT}`);
+//console.log(`📡 Running on port ${PORT}`);
