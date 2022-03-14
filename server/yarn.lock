@@ -972,6 +972,11 @@
     "registry-url" "^5.0.0"
     "semver" "^6.2.0"
 
+"paginate-info@^1.0.4":
+  "integrity" "sha512-wMJUQgitZgmxlHU8MbQc2GvXLh1MuejdiMnlYfA0iXBphbLQT9wuO8WtzmTw6CkPFavEAtlh8BPpBByrZijuaw=="
+  "resolved" "https://registry.npmjs.org/paginate-info/-/paginate-info-1.0.4.tgz"
+  "version" "1.0.4"
+
 "parse-domain@^4.1.0":
   "integrity" "sha512-zas79foMEsbMbIcJoPx26+NISWa3jTzZykOW9mXfRzvgadHvAHGd7qcCc1FbSWbD1I4qP71UWAxlTgu7Uq6IQg=="
   "resolved" "https://registry.npmjs.org/parse-domain/-/parse-domain-4.1.0.tgz"

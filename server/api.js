@@ -1,11 +1,12 @@
 const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
+const { calculateLimitAndOffset, paginate } = require('paginate-info')
 
 const {MongoClient} = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://AmatoJeanEmmanuel:clearfashion@clearfashion.yjbvj.mongodb.net/ClearFashion?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
-//const {ObjectId} = require('mongodb');
+
 
 const PORT = 8092;
 
@@ -24,13 +25,14 @@ app.get('/', (request, response) => {
 });
 
 app.get('/products/search', async(request, response) => {
-  // limit/brand/price/sortby
+  // limit/brand/price/sortby/currentPage/
   try {
     let limit = 12;
     let filter = request.query;
     let sortby = "";
     let products;
-
+    let currentPage = 1;
+    let count = 0;
     if ("limit" in filter) {
       limit = parseInt(request.query.limit);
       delete filter["limit"];
@@ -42,22 +44,48 @@ app.get('/products/search', async(request, response) => {
     if ("price" in filter) {
       filter["price"] = {$lt:parseInt(filter["price"])}
     }
+    if ("currentPage" in filter)
+    {
+      currentPage = request.query.currentPage;
+      delete filter["currentPage"];
+    }
+
+    let {offset} = calculateLimitAndOffset(currentPage, limit);
 
     switch (sortby){
       case "price":
-        products = await collection.find(filter).sort({price: 1}).limit(limit).toArray();
+        totalProducts = await collection.find(filter).sort({price: 1}).toArray();
+        count = totalProducts.length;
+        products = await collection.find(filter).sort({price: 1}).skip(offset).limit(limit).toArray();
+        break;
+      case "date":
+        totalProducts = await collection.find(filter).sort({"release date": 1}).toArray();
+        count = totalProducts.length;
+        products = await collection.find(filter).sort({"release date": 1}).skip(offset).limit(limit).toArray();
         break;
       default:
-        products = await collection.find(filter).limit(limit).toArray();
+        totalProducts = await collection.find(filter).toArray();
+        count = totalProducts.length;
+        products = await collection.find(filter).skip(offset).limit(limit).toArray();
     }
-    // const products = await collection.find(filter).sort({sortby: 1}).limit(limit).toArray();
-    
-    response.send(products);
+  
+    const meta = paginate(currentPage, count, products, limit);
+    response.send({products, meta});
     
   }catch (error) {
     response.status(500).send(error);
   }
 });
+
+// app.get("/products", async(request, response) => {
+//   try{
+//     let products = await collection.find({}).toArray();
+//     response.send(products);
+//   }
+//   catch (error) {
+//     response.status(500).send(error);
+//   }
+// });
 
 app.get("/products/:id", (request, response) => {
   collection.findOne({ "_id": request.params.id }, (error, result) => {
@@ -67,7 +95,6 @@ app.get("/products/:id", (request, response) => {
       response.send(result);
   });
 });
-
 
 app.listen(PORT, () => {
   MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true}, (error, client)=>{
@@ -82,4 +109,3 @@ app.listen(PORT, () => {
 });
 
 console.log(`📡 Running on port ${PORT}`);
-
