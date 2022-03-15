@@ -8,7 +8,6 @@ const {MongoClient} = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://AmatoJeanEmmanuel:clearfashion@clearfashion.yjbvj.mongodb.net/ClearFashion?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
 
-//console.log("je passe ici");
 const PORT = 8092;
 
 const app = express();
@@ -22,7 +21,7 @@ app.use(helmet());
 app.options('*', cors());
 
 const connect = () => {
-  console.log("Currently connecting...");
+  console.log("Trying to connect...");
   MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true}, (error, client)=>{
     if(error) {
       throw error;
@@ -32,10 +31,24 @@ const connect = () => {
     console.log("Connected to `" + MONGODB_DB_NAME + "`!");
     app.listen(PORT);
   });
-}
-//console.log("Je passe ici");
-connect();
+};
 
+// const connect2 = async () => {
+//   try{
+//     console.log("Trying to connect to database...");
+//     const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
+//     db =  client.db(MONGODB_DB_NAME);
+//     collection = db.collection("products");
+//     console.log(`Connected to ${MONGODB_DB_NAME}...`);
+//     app.listen(PORT);
+//   }catch(e){
+//       console.error(e);
+//   } 
+// }
+
+
+connect();
+//console.log("Je passe la meeec");
 app.get('/', (request, response) => {
   response.send({'ack': true});
 });
@@ -62,7 +75,7 @@ app.get('/products/search', async(request, response) => {
     }
     if ("currentPage" in filter)
     {
-      currentPage = request.query.currentPage;
+      currentPage = parseInt(request.query.currentPage);
       delete filter["currentPage"];
     }
 
@@ -89,7 +102,7 @@ app.get('/products/search', async(request, response) => {
     response.send({products, meta});
     
   }catch (error) {
-    response.status(500).send(error);
+    response.status(500).send(`${error.message}`);
   }
 });
 
