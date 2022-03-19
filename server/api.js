@@ -62,7 +62,7 @@ app.get('/products/brands', async(request, response) => {
 })
 
 app.get('/products/search', async(request, response) => {
-  // limit/brand/price/sortby/currentPage/
+  // limit/brand/price/sortby/currentPage/recent(true)
   try {
     let limit = 12;
     let filter = request.query;
@@ -70,6 +70,8 @@ app.get('/products/search', async(request, response) => {
     let products;
     let currentPage = 1;
     let count = 0;
+    let released = new Date();
+
     if ("limit" in filter) {
       limit = parseInt(request.query.limit);
       delete filter["limit"];
@@ -85,6 +87,12 @@ app.get('/products/search', async(request, response) => {
     {
       currentPage = parseInt(request.query.currentPage);
       delete filter["currentPage"];
+    }
+    if ("recent" in filter){
+      released.setDate(released.getDate() - 14);
+      // console.log(released.toLocaleDateString());
+      filter["release date"] = {$gt: released.toLocaleDateString()};
+      delete filter["recent"];
     }
 
     let {offset} = calculateLimitAndOffset(currentPage, limit);
