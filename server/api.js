@@ -48,7 +48,9 @@ const connect = () => {
 
 
 connect();
+
 //console.log("Je passe la meeec");
+
 app.get('/', (request, response) => {
   response.send({'ack': true});
 });
