@@ -91,7 +91,7 @@ app.get('/products/search', async(request, response) => {
     if ("recent" in filter){
       released.setDate(released.getDate() - 14);
       // console.log(released.toLocaleDateString());
-      filter["release date"] = {$gt: released.toLocaleDateString()};
+      filter["release date"] = {$lt: released.toLocaleDateString()};
       delete filter["recent"];
     }
 
