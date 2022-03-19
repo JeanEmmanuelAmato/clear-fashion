@@ -53,6 +53,12 @@ app.get('/', (request, response) => {
   response.send({'ack': true});
 });
 
+app.get('/products/brands', async(request, response) => {
+  let brands = await collection.aggregate([{$group : { _id : "$brand" }}]).toArray();
+  brands = brands.map((brand) => brand._id);
+  response.send({brands});
+})
+
 app.get('/products/search', async(request, response) => {
   // limit/brand/price/sortby/currentPage/
   try {
@@ -81,16 +87,16 @@ app.get('/products/search', async(request, response) => {
 
     let {offset} = calculateLimitAndOffset(currentPage, limit);
 
-    switch (sortby){
+    switch (sortby.split('.')[0]){
       case "price":
-        totalProducts = await collection.find(filter).sort({price: 1}).toArray();
+        totalProducts = await collection.find(filter).sort({price: parseInt(sortby.split('.')[1])}).toArray();
         count = totalProducts.length;
-        products = await collection.find(filter).sort({price: 1}).skip(offset).limit(limit).toArray();
+        products = await collection.find(filter).sort({price: parseInt(sortby.split('.')[1])}).skip(offset).limit(limit).toArray();
         break;
       case "date":
-        totalProducts = await collection.find(filter).sort({"release date": 1}).toArray();
+        totalProducts = await collection.find(filter).sort({"release date": parseInt(sortby.split('.')[1])}).toArray();
         count = totalProducts.length;
-        products = await collection.find(filter).sort({"release date": 1}).skip(offset).limit(limit).toArray();
+        products = await collection.find(filter).sort({"release date": parseInt(sortby.split('.')[1])}).skip(offset).limit(limit).toArray();
         break;
       default:
         totalProducts = await collection.find(filter).toArray();
