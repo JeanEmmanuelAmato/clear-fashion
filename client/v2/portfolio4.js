@@ -68,6 +68,8 @@ const setURL = (page = 1, size = 12) => {
         case 'By recently released':
             url = url + '&recent=true';
             break;
+        case 'By favorite':
+            url = 'no url';
         default:
 
     }
@@ -86,16 +88,64 @@ const setURL = (page = 1, size = 12) => {
  const fetchProducts2 = async (page = 1, size = 12) => {
     try {
         const url = setURL(page, size);
-        const response = await fetch(url);
-        const body = await response.json();
-  
-        return body;
-
+        if (url != 'no url'){
+            const response = await fetch(url);
+            const body = await response.json();
+            return body;
+        }
+        else {
+            favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            if (selectBrand.value != '' && selectBrand.value != 'All brands'){
+                favorites = favorites.filter(product => product.brand == selectBrand.value);
+            }
+            switch(selectSort.value){
+                case 'price-asc':
+                    favorites = favorites.sort(comparePrice);
+                    break;
+                case 'price-desc':
+                    favorites = favorites.sort(comparePrice).reverse();
+                    break;
+                case 'date-asc':
+                    favorites = favorites.sort(compareDate);
+                    break;
+                case 'date-desc':
+                    favorites = favorites.sort(compareDate).reverse()
+                    break;
+                default:
+        
+            }
+            const meta = setPaginationFavorites(page, size, favorites.length);
+            let productsFavorite = [];
+            let start = -size;
+            start = start + page*size;
+            if (page == meta.pageCount){
+                productsFavorite = favorites.slice(start);
+            }
+            else{
+                productsFavorite = favorites.slice(start, start + size);
+            }
+            const body = {
+                "products": productsFavorite,
+                "meta": meta
+            }
+            return body;
+        }
     } catch (error) {
         console.error(error);
         return {currentProducts, currentPagination};
     }
   };
+  
+const setPaginationFavorites = (page, limit, count) => {
+    const pageCount = Math.ceil(count/limit);
+    const meta = {
+        "currentPage": page,
+        "pageCount": pageCount,
+        "pageSize": limit,
+        "count": count
+    }
+    return meta;
+}
 
 /**
  * Render list of products
@@ -297,10 +347,10 @@ selectPage.addEventListener('change', async (event) => {
   selectFilter.addEventListener('change', async (event) => {
     const products = await fetchProducts2();
     
-    if (event.target.value == "By favorite"){
-      favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-      products.products = favorites;
-    }
+    // if (event.target.value == "By favorite"){
+    //   favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    //   products.products = favorites;
+    // }
     setCurrentProducts(products);
     render(currentProducts, currentPagination);
     
