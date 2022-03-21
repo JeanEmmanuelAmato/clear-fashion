@@ -347,10 +347,6 @@ selectPage.addEventListener('change', async (event) => {
   selectFilter.addEventListener('change', async (event) => {
     const products = await fetchProducts2();
     
-    // if (event.target.value == "By favorite"){
-    //   favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    //   products.products = favorites;
-    // }
     setCurrentProducts(products);
     render(currentProducts, currentPagination);
     
@@ -384,7 +380,7 @@ selectPage.addEventListener('change', async (event) => {
   
   // Feature 13 - Save as favorite 
 
-const addToFav = (index) => {
+const addToFav = async(index) => {
     //console.log(index);
     favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     let productToAddFav = currentProducts[index];
@@ -403,6 +399,11 @@ const addToFav = (index) => {
           favorites = favorites.filter(product => product._id != productToAddFav._id);
           localStorage.setItem('favorites', JSON.stringify(favorites));
           window.alert("Produit Supprimé");
+
+          const products = await fetchProducts2();
+    
+          setCurrentProducts(products);
+          render(currentProducts, currentPagination);
         }
         else {
           window.alert("Le produit n'a pas été supprimé de vos favoris.");

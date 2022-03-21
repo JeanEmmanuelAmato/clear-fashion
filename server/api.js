@@ -40,7 +40,7 @@ const connect = () => {
 //     db =  client.db(MONGODB_DB_NAME);
 //     collection = db.collection("products");
 //     console.log(`Connected to ${MONGODB_DB_NAME}...`);
-//     app.listen(PORT);
+//     // app.listen(PORT);
 //   }catch(e){
 //       console.error(e);
 //   } 
