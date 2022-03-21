@@ -2,8 +2,8 @@ const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
 const { calculateLimitAndOffset, paginate } = require('paginate-info');
-
-let db, collection;
+const clientPromise = require('./mongodb-client');
+let client, collection, db;
 const {MongoClient} = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://AmatoJeanEmmanuel:clearfashion@clearfashion.yjbvj.mongodb.net/ClearFashion?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
@@ -19,6 +19,14 @@ app.use(cors());
 app.use(helmet());
 
 app.options('*', cors());
+
+// const connect = async() => {
+//   client = await clientPromise;
+//   collection = await client.db(DATABASE_NAME).collection("products");
+//   console.log(`Connected to ${MONGODB_DB_NAME}...`);
+// };
+
+
 
 const connect = () => {
   console.log("Trying to connect...");
@@ -133,7 +141,7 @@ app.get("/products", async(request, response) => {
 });
 
 app.get("/products/:id", (request, response) => {
-  console.log(collection)
+  console.log(collection);
   collection.findOne({ "_id": request.params.id }, (error, result) => {
       if(error) {
           return response.status(500).send(error);
