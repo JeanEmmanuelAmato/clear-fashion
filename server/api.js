@@ -28,18 +28,18 @@ app.options('*', cors());
 
 
 
-const connect = () => {
-  console.log("Trying to connect...");
-  MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true}, (error, client)=>{
-    if(error) {
-      throw error;
-  }
-    db = client.db(MONGODB_DB_NAME);
-    collection = db.collection("products");
-    console.log("Connected to `" + MONGODB_DB_NAME + "`!");
-    app.listen(PORT);
-  });
-};
+// const connect = () => {
+//   console.log("Trying to connect...");
+//   MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true}, (error, client)=>{
+//     if(error) {
+//       throw error;
+//   }
+//     db = client.db(MONGODB_DB_NAME);
+//     collection = db.collection("products");
+//     console.log("Connected to `" + MONGODB_DB_NAME + "`!");
+//     app.listen(PORT);
+//   });
+// };
 
 // const connect2 = async () => {
 //   try{
@@ -55,7 +55,9 @@ const connect = () => {
 // }
 
 
-connect();
+// connect();
+
+
 
 //console.log("Je passe la meeec");
 
@@ -72,6 +74,8 @@ app.get('/products/brands', async(request, response) => {
 app.get('/products/search', async(request, response) => {
   // limit/brand/price/sortby/currentPage/recent(true)
   try {
+    client = await clientPromise;
+    collection = await client.db(MONGODB_DB_NAME).collection("products");
     let limit = 12;
     let filter = request.query;
     let sortby = "";
@@ -132,6 +136,8 @@ app.get('/products/search', async(request, response) => {
 
 app.get("/products", async(request, response) => {
   try{
+    client = await clientPromise;
+    collection = await client.db(MONGODB_DB_NAME).collection("products");
     let products = await collection.find({}).toArray();
     response.send(products);
   }
