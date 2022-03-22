@@ -40,7 +40,7 @@ const setCurrentProducts = (products) => {
  */
 
 const setURL = (page = 1, size = 12) => {
-    let url = `http://localhost:8092/products/search?limit=${size}&currentPage=${page}`
+    let url = `https://server-livid-ten.vercel.app/products/search?limit=${size}&currentPage=${page}`
     
     if (selectBrand.value != '' && selectBrand.value != 'All brands'){
         url = url + `&brand=${selectBrand.value}`;
@@ -213,7 +213,7 @@ const renderIndicators = pagination => {
 
 const renderNbNewProducts = async (pagination) => {
   const response = await fetch(
-    `http://localhost:8092/products/search?limit=40000` // à revoir car en dur actuellement
+    `https://server-livid-ten.vercel.app/products/search?limit=40000` // à revoir car en dur actuellement
   );
   const body = await response.json();
 
@@ -227,7 +227,7 @@ const renderNbNewProducts = async (pagination) => {
 
  const renderLastReleaseDate = async (pagination) => {
   const response = await fetch(
-    `http://localhost:8092/products/search?limit=40000` // à revoir car en dur actuellement
+    `https://server-livid-ten.vercel.app/products/search?limit=40000` // à revoir car en dur actuellement
   );
   const body = await response.json();
 
@@ -241,7 +241,7 @@ const renderNbNewProducts = async (pagination) => {
 
 const renderPercentile = async (pagination, p, spanP) => {
   const response = await fetch(
-    `http://localhost:8092/products/search?limit=40000` // à revoir car en dur actuellement
+    `https://server-livid-ten.vercel.app/products/search?limit=40000` // à revoir car en dur actuellement
   );
   const body = await response.json();
 
@@ -260,7 +260,7 @@ const renderPercentile = async (pagination, p, spanP) => {
 
 const renderBrands = async() => {
   const response = await fetch(
-    `http://localhost:8092/products/brands`
+    `https://server-livid-ten.vercel.app/products/brands`
   );
   const body = await response.json();
   const brandsNames = body.brands;
@@ -330,7 +330,7 @@ selectPage.addEventListener('change', async (event) => {
  */
 
  selectBrand.addEventListener('change', async (event) => {
-    const products = await fetchProducts2();
+    const products = await fetchProducts2(1, parseInt(selectShow.value));
 
     setCurrentProducts(products);
     render(currentProducts, currentPagination);
@@ -345,7 +345,7 @@ selectPage.addEventListener('change', async (event) => {
   }
   
   selectFilter.addEventListener('change', async (event) => {
-    const products = await fetchProducts2();
+    const products = await fetchProducts2(1, parseInt(selectShow.value));
     
     setCurrentProducts(products);
     render(currentProducts, currentPagination);
