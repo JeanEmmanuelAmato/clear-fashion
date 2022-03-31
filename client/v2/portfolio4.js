@@ -279,7 +279,7 @@ const render = (products, pagination) => {
 };
 
 
-const renderOnce = (products, pagination) =>{
+const renderInfo = (products, pagination) =>{
     renderIndicators(pagination);
     renderNbNewProducts(pagination);
     renderLastReleaseDate(pagination);
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
-  renderOnce(currentProducts, currentPagination);
+  renderInfo(currentProducts, currentPagination);
 });
 
 // Feature 1 - Browse pages 
@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', async () => {
  */
  
 selectPage.addEventListener('change', async (event) => {
-  const products = await fetchProducts2(parseInt(event.target.value), currentPagination.pageSize);
+  const products = await fetchProducts2(parseInt(event.target.value), parseInt(selectShow.value));
 
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
@@ -334,6 +334,7 @@ selectPage.addEventListener('change', async (event) => {
 
     setCurrentProducts(products);
     render(currentProducts, currentPagination);
+    //renderInfo(currentProducts, currentPagination);
   })
   
   // Features 3, 4 and 15 - Filter by recent products, reasonable priced, and favorite products
@@ -349,8 +350,7 @@ selectPage.addEventListener('change', async (event) => {
     
     setCurrentProducts(products);
     render(currentProducts, currentPagination);
-    
-  
+    //renderInfo(currentProducts, currentPagination);
   })
   
   // Features 5 and 6 - Sort by Price and Date  
