@@ -1,0 +1,23 @@
+h1 {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 3rem;
+}
+h2 {
+    text-transform: uppercase;
+}
+
+body {
+    width: 90%;
+    margin: 0 auto;
+
+}
+
+#indicators {
+    border-radius: 15px;
+    text-align: center;
+}
+
+.product {
+    text-align: center;
+}
