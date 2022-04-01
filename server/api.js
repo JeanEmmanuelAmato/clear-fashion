@@ -62,12 +62,12 @@ app.options('*', cors());
 //console.log("Je passe la meeec");
 
 app.get('/', (request, response) => {
-  client = await clientPromise;
   response.send({'ack': true});
 });
 
 app.get('/products/brands', async(request, response) => {
   client = await clientPromise;
+  collection = await client.db(MONGODB_DB_NAME).collection("products");
   let brands = await collection.aggregate([{$group : { _id : "$brand" }}]).toArray();
   brands = brands.map((brand) => brand._id);
   response.send({brands});
@@ -138,8 +138,8 @@ app.get('/products/search', async(request, response) => {
 
 app.get("/products", async(request, response) => {
   try{
-    client = await clientPromise;
-    collection = await client.db(MONGODB_DB_NAME).collection("products");
+    // client = await clientPromise;
+    // collection = await client.db(MONGODB_DB_NAME).collection("products");
     let products = await collection.find({}).toArray();
     response.send(products);
   }
