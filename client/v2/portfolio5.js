@@ -66,7 +66,6 @@ const setURL = (page = 1, size = 12) => {
             url = url + '&price=51';
             break;
         case 'By recently released':
-            url = url + '&recent=true';
             break;
         case 'By favorite':
             url = 'no url';
@@ -89,9 +88,38 @@ const setURL = (page = 1, size = 12) => {
     try {
         const url = setURL(page, size);
         if (url != 'no url'){
-            const response = await fetch(url);
-            const body = await response.json();
-            return body;
+            if(selectFilter.value == 'By recently released'){
+                const response = await fetch(url);
+                const body = await response.json();
+                
+                body.products = body.products.filter(product => compareReleasedToToday(product['released date']) <= 1.2096e9);
+
+                const meta = setPaginationFavorites(page, size, body.products.length);
+                let productsRender = [];
+                let start = -size;
+                start = start + page*size;
+                if (page == meta.pageCount){
+                    productsRender = body.products.slice(start);
+                }
+                else{
+                    productsRender = body.products.slice(start, start + size);
+                }
+                const bodyRecent = {
+                    "products": productsRender,
+                    "meta": meta
+                };
+
+                return bodyRecent;
+            }
+            else{
+                const response = await fetch(url);
+                const body = await response.json();
+                return body;
+            }
+            // const response = await fetch(url);
+            // const body = await response.json();
+            // return body;
+            
         }
         else {
             favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
@@ -127,7 +155,7 @@ const setURL = (page = 1, size = 12) => {
             const body = {
                 "products": productsFavorite,
                 "meta": meta
-            }
+            };
             return body;
         }
     } catch (error) {
