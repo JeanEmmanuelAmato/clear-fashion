@@ -62,10 +62,12 @@ app.options('*', cors());
 //console.log("Je passe la meeec");
 
 app.get('/', (request, response) => {
+  client = await clientPromise;
   response.send({'ack': true});
 });
 
 app.get('/products/brands', async(request, response) => {
+  client = await clientPromise;
   let brands = await collection.aggregate([{$group : { _id : "$brand" }}]).toArray();
   brands = brands.map((brand) => brand._id);
   response.send({brands});

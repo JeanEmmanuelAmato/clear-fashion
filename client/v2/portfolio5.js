@@ -116,10 +116,6 @@ const setURL = (page = 1, size = 12) => {
                 const body = await response.json();
                 return body;
             }
-            // const response = await fetch(url);
-            // const body = await response.json();
-            // return body;
-            
         }
         else {
             favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
